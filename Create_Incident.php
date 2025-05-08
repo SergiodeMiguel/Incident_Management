@@ -21,11 +21,11 @@ $departments = $conn->query("SELECT id, name FROM departments");
 
 // Fetch existing incidents for display
 $incidents = $conn->query(
-  "SELECT i.id, i.title, i.description, i.status, i.creation_date, 
-  u.name as user_name, c.name as category_name, d.name as department_name 
-  FROM incidents i JOIN users u ON i.user_id = u.id 
-  JOIN categories c ON i.category_id = c.id 
-  JOIN departments d ON i.department_id = d.id 
+  "SELECT i.id, i.title, i.description, i.status, i.creation_date,
+  u.name as user_name, c.name as category_name, d.name as department_name
+  FROM incidents i JOIN users u ON i.user_id = u.id
+  JOIN categories c ON i.category_id = c.id
+  JOIN departments d ON i.department_id = d.id
   ORDER BY i.creation_date DESC");
 
 // Check for success message
@@ -202,7 +202,7 @@ $success_message = isset($_GET['success']) ? "Incident successfully added!" : ""
             <div class="incident-card text-center">
               <h3 class="incident-card-title">Open</h3>
               <div class="text-primary" style="font-size: 2rem; font-weight: bold;">
-                <?php 
+                <?php
                   $openCount = $conn->query("SELECT COUNT(*) as count FROM incidents WHERE status = 'Open'")->fetch_assoc();
                   echo $openCount['count'];
                 ?>
@@ -211,7 +211,7 @@ $success_message = isset($_GET['success']) ? "Incident successfully added!" : ""
             <div class="incident-card text-center">
               <h3 class="incident-card-title">In Progress</h3>
               <div class="text-warning" style="font-size: 2rem; font-weight: bold;">
-                <?php 
+                <?php
                   $inProgressCount = $conn->query("SELECT COUNT(*) as count FROM incidents WHERE status = 'In Progress'")->fetch_assoc();
                   echo $inProgressCount['count'];
                 ?>
@@ -220,7 +220,7 @@ $success_message = isset($_GET['success']) ? "Incident successfully added!" : ""
             <div class="incident-card text-center">
               <h3 class="incident-card-title">Resolved</h3>
               <div class="text-success" style="font-size: 2rem; font-weight: bold;">
-                <?php 
+                <?php
                   $resolvedCount = $conn->query("SELECT COUNT(*) as count FROM incidents WHERE status = 'Resolved'")->fetch_assoc();
                   echo $resolvedCount['count'];
                 ?>
