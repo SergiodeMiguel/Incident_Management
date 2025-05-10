@@ -1,35 +1,61 @@
 <?php
-// Connect to the database
+// ---------- DATABASE CONNECTION ----------
+
+// Define database connection credentials
 $host = 'localhost';
 $db = 'incident_managementdb';
-$user = 'root'; // Cambia si usas otro usuario
-$pass = '';     // Cambia si tu usuario tiene contraseña
+$user = 'root'; // Change this if your MySQL user is different.
+$pass = '';     // Add your password if your MySQL user has one.
 
+// Create a new connection to the MySQL database
 $conn = new mysqli($host, $user, $pass, $db);
+
+// Check if connection has failed
 if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error); // Stop script and show error message.
+}
+// ---------- FETCH DATA FROM DATABASE ----------
+
+// Fetch all users once and store them in an array
+$user_result = $conn->query("SELECT id, name FROM users");
+$users = [];
+
+if ($user_result) {
+  $users = $user_result->fetch_all(MYSQLI_ASSOC); //Converts all results into a complete associative array.
+                                                  // This is useful for later use in the form dropdowns.
 }
 
-// Fetch users
+// If you don't want to store it in an array, you can use this code block.
+/* Query to get users for the "Reported By" dropdown
 $users = $conn->query("SELECT id, name FROM users");
 
-// Fetch categories
+// Query to get users for the "Assigned To" dropdown.
+// Re-fetch user list again because when a result is run through with a while, it is exhausted (it is of a single use).
+$users_assigned = $conn->query("SELECT id, name FROM users");
+*/
+
+// Query to get categories for the "Category" dropdown
 $categories = $conn->query("SELECT id, name FROM categories");
 
-// Fetch departments
+// Query to get departments for the "Department" dropdown
 $departments = $conn->query("SELECT id, name FROM departments");
 
 // Fetch existing incidents for display
 $incidents = $conn->query(
-  "SELECT i.id, i.title, i.description, i.status, i.creation_date,
-  u.name as user_name, c.name as category_name, d.name as department_name
-  FROM incidents i JOIN users u ON i.user_id = u.id
-  JOIN categories c ON i.category_id = c.id
-  JOIN departments d ON i.department_id = d.id
+  "SELECT i.id, i.title, i.description, i.status, i.creation_date, 
+  u.name as user_name, c.name as category_name, d.name as department_name 
+  FROM incidents i JOIN users u ON i.user_id = u.id 
+  JOIN categories c ON i.category_id = c.id 
+  JOIN departments d ON i.department_id = d.id 
   ORDER BY i.creation_date DESC");
 
+// Note: Status options are hardcoded in this version, not fetched from the database.
+// You can modify this to fetch from a "statuses" table if needed. 
+
 // Check for success message
-$success_message = isset($_GET['success']) ? "Incident successfully added!" : "";
+// $success_message = isset($_GET['success']) ? "Incident successfully added!" : "";
+
+// ---------- HTML FORM ----------
 ?>
 
 <!DOCTYPE html>
@@ -37,215 +63,98 @@ $success_message = isset($_GET['success']) ? "Incident successfully added!" : ""
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Incident Management</title>
-  <link rel="stylesheet" href="styles.css" />
+
+  <title>Incident Management</title> <!-- Page title shown in browser tab -->
+  <link rel="stylesheet" href="styles.css" /> <!-- Link to external CSS file for styling -->
 </head>
+
 <body>
-  <!-- Header with navigation -->
-  <header class="header">
-    <nav class="nav">
-      <a href="indice2.php" class="nav-logo">Incident Manager</a>
-      <div class="nav-links">
-        <a href="indice2.php" class="nav-link active">Dashboard</a>
-        <a href="#" class="nav-link">Reports</a>
-        <a href="#" class="nav-link">Settings</a>
-      </div>
-    </nav>
-  </header>
-
+  <!-- Wrapper container for layout and spacing -->
   <div class="container">
-    <?php if($success_message): ?>
-      <div class="notification notification-success fade-in">
-        <?php echo $success_message; ?>
-      </div>
-    <?php endif; ?>
 
+    <!-- Main heading of the page -->
     <h1>Incident Management System</h1>
+    <h2>Create New Incident</h2>
+    
+    <!-- Form for submitting a new incident -->
+    <!-- "method=POST" sends data securely; "action" points to the PHP script that processes the form: "submit_incident.php"  -->
+    <form id="incident-form" method="POST" action="Submit_incident.php">
 
-    <div class="grid grid-2">
-      <!-- Incident Form -->
-      <div class="card">
-        <h2>Create New Incident</h2>
-        <form id="incident-form" method="POST" action="submit_incident.php">
-          <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" id="title" name="title" required />
-          </div>
+    <!-- Text input for the title of the incident -->
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" required />
 
-          <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" name="description" rows="4" required></textarea>
-            <span class="form-hint">Provide detailed information about the incident</span>
-          </div>
+    <!-- Text area for a description of the incident -->
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="4" required></textarea>
+      <span class="form-hint">Provide detailed information about the incident</span>
 
-          <div class="grid grid-2">
-            <!-- Users dropdown from DB -->
-            <div class="form-group">
-              <label for="user">Reported By</label>
-              <select id="user" name="user" required>
-                <option value="">Select User</option>
-                <?php while($row = $users->fetch_assoc()): ?>
-                  <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></option>
-                <?php endwhile; ?>
-              </select>
-            </div>
+    <!-- Dropdown to select the user reporting the incident  -->
+      <label for="user">Reported By</label>
+      <select id="user" name="user" required>
+        <option value="" disabled selected hidden>Select user</option>
+        <?php foreach ($users as $user): ?>
+          <option value="<?= $user['id'] ?>"><?= htmlspecialchars($user['name']) ?></option>
+        <?php endforeach; ?>
 
-            <!-- Categories dropdown from DB -->
-            <div class="form-group">
-              <label for="category">Category</label>
-              <select id="category" name="category" required>
-                <option value="">Select Category</option>
-                <?php while($row = $categories->fetch_assoc()): ?>
-                  <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></option>
-                <?php endwhile; ?>
-              </select>
-            </div>
-          </div>
+        <!-- Remove the block above uncomment this block to obtain users in a different way -->
+        <?php /*while($row = $users->fetch_assoc()): ?>
+          <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></option>
+        <?php endwhile;*/ ?>
+      </select>
+      <span class="form-hint">Select the person who reports this incident</span>
 
-          <div class="grid grid-2">
-            <!-- Departments dropdown from DB -->
-            <div class="form-group">
-              <label for="department">Department</label>
-              <select id="department" name="department" required>
-                <option value="">Select Department</option>
-                <?php while($row = $departments->fetch_assoc()): ?>
-                  <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></option>
-                <?php endwhile; ?>
-              </select>
-            </div>
+    <!-- Dropdown to select the user assigned to resolve the incident -->
+      <label for="assigned_user">Assigned To</label>
+      <select id="assigned_user" name="assigned_user" required>
+        <option value="" disabled selected hidden>Select user</option>
+        <?php foreach ($users as $user): ?>
+          <option value="<?= $user['id'] ?>"><?= htmlspecialchars($user['name']) ?></option>
+        <?php endforeach; ?>
+        
+        <!-- Remove the block above uncomment this block to obtain users in a different way -->
+        <?php /*while($row = $users_assigned->fetch_assoc()): ?>
+          <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></option>
+        <?php endwhile;*/?>
+      </select>
+      <span class="form-hint">Select the person responsible for handling this incident</span>
 
-            <!-- Static statuses for now -->
-            <div class="form-group">
-              <label for="status">Status</label>
-              <select id="status" name="status" required>
-                <option value="">Select Status</option>
-                <option value="Open">Open</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
-              </select>
-            </div>
-          </div>
+      <!-- Categories dropdown from DB -->
+      <label for="category">Category</label>
+      <select id="category" name="category" required>
+        <option value="" disabled selected hidden>Select category</option>
+        <?php while($row = $categories->fetch_assoc()): ?>
+          <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></option>
+        <?php endwhile; ?>
+      </select>
+      <span class="form-hint">Select the categorie of the incident</span>
 
-          <div class="flex gap-3 mt-4">
-            <button type="submit" class="btn btn-primary btn-block">Add Incident</button>
-            <button type="reset" class="btn btn-outline">Reset</button>
-          </div>
-        </form>
-      </div>
+      <!-- Departments dropdown from DB -->
+      <label for="department">Department</label>
+      <select id="department" name="department" required>
+        <option value="" disabled selected hidden>Select department</option>
+        <?php while($row = $departments->fetch_assoc()): ?>
+          <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['name']) ?></option>
+        <?php endwhile; ?>
+      </select>
+      <span class="form-hint">Select the department which is affected</span>
 
-      <!-- Recent Incidents -->
-      <div>
-        <div class="card">
-          <h2>Recent Incidents</h2>
-          
-          <?php if($incidents && $incidents->num_rows > 0): ?>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>Status</th>
-                    <th>Department</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php while($incident = $incidents->fetch_assoc()): ?>
-                    <tr>
-                      <td>
-                        <?= htmlspecialchars($incident['title']) ?>
-                        <div class="text-muted"><?= htmlspecialchars($incident['user_name']) ?></div>
-                      </td>
-                      <td>
-                        <?php 
-                          $statusClass = '';
-                          switch($incident['status']) {
-                            case 'Open':
-                              $statusClass = 'status-open';
-                              break;
-                            case 'In Progress':
-                              $statusClass = 'status-in-progress';
-                              break;
-                            case 'Resolved':
-                              $statusClass = 'status-resolved';
-                              break;
-                            default:
-                              $statusClass = 'status-open';
-                          }
-                        ?>
-                        <span class="status <?= $statusClass ?>"><?= htmlspecialchars($incident['status']) ?></span>
-                      </td>
-                      <td><?= htmlspecialchars($incident['department_name']) ?></td>
-                      <td>
-                        <div class="actions">
-                          <a href="view_incident.php?id=<?= $incident['id'] ?>" class="btn btn-sm btn-outline">View</a>
-                          <a href="edit_incident.php?id=<?= $incident['id'] ?>" class="btn btn-sm btn-outline">Edit</a>
-                        </div>
-                      </td>
-                    </tr>
-                  <?php endwhile; ?>
-                </tbody>
-              </table>
-            </div>
-            <div class="mt-3 text-center">
-              <a href="all_incidents.php" class="btn btn-outline">View All Incidents</a>
-            </div>
-          <?php else: ?>
-            <p class="text-muted text-center">No incidents found. Create your first incident using the form.</p>
-          <?php endif; ?>
-        </div>
+      <!-- Static statuses for now -->
+      <label for="status">Status</label>
+      <select id="status" name="status" required>
+        <option value="" disabled selected hidden>Select status</option>
+        <option value="Open">Open</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+      </select>
+      <span class="form-hint">Select the person status of the incident</span>
 
-        <!-- Quick Stats Card -->
-        <div class="card mt-4">
-          <h2>Quick Stats</h2>
-          <div class="grid grid-3 mt-3">
-            <div class="incident-card text-center">
-              <h3 class="incident-card-title">Open</h3>
-              <div class="text-primary" style="font-size: 2rem; font-weight: bold;">
-                <?php
-                  $openCount = $conn->query("SELECT COUNT(*) as count FROM incidents WHERE status = 'Open'")->fetch_assoc();
-                  echo $openCount['count'];
-                ?>
-              </div>
-            </div>
-            <div class="incident-card text-center">
-              <h3 class="incident-card-title">In Progress</h3>
-              <div class="text-warning" style="font-size: 2rem; font-weight: bold;">
-                <?php
-                  $inProgressCount = $conn->query("SELECT COUNT(*) as count FROM incidents WHERE status = 'In Progress'")->fetch_assoc();
-                  echo $inProgressCount['count'];
-                ?>
-              </div>
-            </div>
-            <div class="incident-card text-center">
-              <h3 class="incident-card-title">Resolved</h3>
-              <div class="text-success" style="font-size: 2rem; font-weight: bold;">
-                <?php
-                  $resolvedCount = $conn->query("SELECT COUNT(*) as count FROM incidents WHERE status = 'Resolved'")->fetch_assoc();
-                  echo $resolvedCount['count'];
-                ?>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <!-- Submit button to send the information to "Submit_Incident.php" -->
+      <button type="submit">Add Incident</button>
+      <!-- Reset button to clear the form -->
+      <button type="reset">Reset</button>
+
+    </form>
   </div>
-
-  <script>
-    // Auto-hide notification after 5 seconds
-    document.addEventListener('DOMContentLoaded', function() {
-      const notification = document.querySelector('.notification');
-      if (notification) {
-        setTimeout(function() {
-          notification.style.opacity = '0';
-          notification.style.transition = 'opacity 0.5s';
-          setTimeout(function() {
-            notification.remove();
-          }, 500);
-        }, 5000);
-      }
-    });
-  </script>
 </body>
 </html>

@@ -45,6 +45,7 @@ CREATE TABLE incidents (
   user_id INT,                       -- ID of the user who reported the incident
   category_id INT,                   -- ID of the category assigned to the incident
   department_id INT,                 -- ID of the department assigned to the incident
+  assigned_user_id INT,              -- ID of the user currently assigned to handle it
   status VARCHAR(50),                -- Incident status (e.g., Open, Closed)
   creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Date when the incident was created
 );
@@ -55,6 +56,7 @@ CREATE TABLE updates (
   id INT AUTO_INCREMENT PRIMARY KEY, -- Unique ID for each update
   incident_id INT,                   -- ID of the incident being updated
   user_id INT,                       -- ID of the user making the update
+  assigned_user_id INT,              -- ID of the new user assigned (if changed)
   comment TEXT,                      -- Comment or update on the incident
   new_status VARCHAR(50),            -- New status of the incident (e.g., In Progress, Resolved)
   date TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Date when the update was made
