@@ -1,17 +1,6 @@
 <?php
-// Database connection configuration
-$host = 'localhost';
-$db = 'incident_managementdb';
-$user = 'root'; // Cambia esto si tu usuario es diferente
-$pass = '';     // Añade la contraseña si tienes una
-
-// Conectar a la base de datos
-$conn = new mysqli($host, $user, $pass, $db);
-
-// Verificar conexión
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Include the connection to the database from db_connection.php
+require_once 'Includes/db.php'; // Set the path if it is in another folder
 
 // Validar que todos los campos han sido enviados
 if (
