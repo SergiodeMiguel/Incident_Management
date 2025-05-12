@@ -1,6 +1,13 @@
 <?php
+// Redirect back to the form if accessed directly without the ?success=1 parameter
+if (!isset($_GET['success']) || $_GET['success'] != 1) {
+    header("Location: create_incident.php");
+    exit();
+}
+?>
+<?php
 // Include the connection to the database from db_connection.php
-require_once 'Includes/db_connection.php'; // Adjust the path if needed
+require_once 'C:\xampp\htdocs\PROYECT\SERVER\Includes\db_connection.php'; // Adjust the path if needed
 
 // ---------- VALIDATE AND CLEAN INPUT ----------
 

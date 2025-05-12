@@ -74,7 +74,7 @@ if (!isset($_GET['success']) || $_GET['success'] != 1) {
 </head>
 <body>
     <div class="card">
-        <div class="emoji">🎉</div>
+        <div class="emoji">✔️</div>
         <h2>Incident successfully created!</h2>
         <p>Your incident has been registered in the system.</p>
         <div class="redirect">You will be redirected to the form in 3 seconds...</div>

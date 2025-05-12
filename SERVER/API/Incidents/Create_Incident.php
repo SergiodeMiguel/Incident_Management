@@ -1,6 +1,6 @@
 <?php
 // Include the connection to the database from db_connection.php
-require_once 'Includes/db_connection.php'; // Set the path if it is in another folder
+require_once 'C:\xampp\htdocs\PROYECT\SERVER\Includes\db_connection.php'; // Set the path if it is in another folder
 
 // ---------- FETCH DATA FROM DATABASE ----------
 
