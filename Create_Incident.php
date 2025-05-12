@@ -1,6 +1,6 @@
 <?php
 // Include the connection to the database from db_connection.php
-require_once 'Includes/db.php'; // Set the path if it is in another folder
+require_once 'Includes/db_connection.php'; // Set the path if it is in another folder
 
 // ---------- FETCH DATA FROM DATABASE ----------
 
@@ -53,7 +53,7 @@ $incidents = $conn->query(
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Incident Management</title> <!-- Page title shown in browser tab -->
-  <link rel="stylesheet" href="styles.css" /> <!-- Link to external CSS file for styling -->
+  <link rel="stylesheet" href="Assets\styles.css" /> <!-- Link to external CSS file for styling -->
 </head>
 
 <body>
@@ -66,7 +66,7 @@ $incidents = $conn->query(
     
     <!-- Form for submitting a new incident -->
     <!-- "method=POST" sends data securely; "action" points to the PHP script that processes the form: "submit_incident.php"  -->
-    <form id="incident-form" method="POST" action="Submit_incident.php">
+    <form id="incident-form" method="POST" action="Submit_Incident.php">
 
     <!-- Text input for the title of the incident -->
       <label for="title">Title</label>

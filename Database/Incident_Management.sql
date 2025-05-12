@@ -70,7 +70,7 @@ INSERT INTO users (name, email) VALUES
 
 -- Insert sample data into the categories table
 -- This data will be used to categorize incidents
-INSERT INTO categories (name) VALUES ('Hardware'), ('Software'), ('Red');
+INSERT INTO categories (name) VALUES ('Hardware'), ('Software'), ('Network');
 
 -- Insert sample data into the departments table
 -- This data will be used to categorize incidents by department
