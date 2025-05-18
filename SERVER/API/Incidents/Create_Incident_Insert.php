@@ -1,4 +1,8 @@
 <?php
+/* FILE TO INSERT NEW INCIDENTS INTO DATABASE
+   This PHP script receives incident data via POST, validates it, and inserts a new record into the database.
+   It responds with a JSON object indicating success or failure, used by the frontend. */
+
 // Include the connection to the database from db_connection.php
 require_once '../../Includes/db_connection.php'; // Adjust the path if needed
 

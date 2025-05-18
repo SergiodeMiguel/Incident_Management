@@ -1,3 +1,9 @@
+/* JAVASCRIPT FOR INCIDENT CREATION FORM
+   This script dynamically populates dropdowns using data fetched from the server,
+   handles form submission via POST to the server API,
+   and redirects to the success page upon successful incident insertion.*/
+
+
 // Wait until the entire HTML document is fully loaded and parsed
 document.addEventListener('DOMContentLoaded', () => {
 

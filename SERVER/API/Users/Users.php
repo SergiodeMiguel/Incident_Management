@@ -1,7 +1,7 @@
 <?php
-            /* FILE TO GET USER DATA
-               This file returns a list of all registered users in the database.
-               It is used to fill in the "Reported By" and "Assigned To" fields of the form.*/
+/* FILE TO GET USER DATA
+   This file returns a list of all registered users in the database.
+   It is used to fill in the "Reported By" and "Assigned To" fields of the form.*/
 
 // Return a JSON response with all users from the database
 header('Content-Type: application/json');

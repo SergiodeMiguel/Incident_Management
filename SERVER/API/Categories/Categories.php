@@ -1,7 +1,7 @@
 <?php
-            /* FILE TO OBTAIN THE CATEGORIES OF THE INCIDENTS
-               This file returns a list of all available categories (Hardware, Software, etc.)
-               that will be used to fill in the "Category" field of the issue creation form.*/
+/* FILE TO OBTAIN THE CATEGORIES OF THE INCIDENTS
+   This file returns a list of all available categories (Hardware, Software, etc.)
+   that will be used to fill in the "Category" field of the issue creation form.*/
 
 // Set the content type of the response to JSON format
 header('Content-Type: application/json');

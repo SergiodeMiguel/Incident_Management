@@ -1,7 +1,7 @@
 <?php
-            /* FILE TO GET DEPARTMENTS
-               This file returns a list of all departments (IT, Support, Development, etc.)
-               to fill in the "Department" field of the Incident Creation Form.*/
+/* FILE TO GET DEPARTMENTS
+   This file returns a list of all departments (IT, Support, Development, etc.)
+   to fill in the "Department" field of the Incident Creation Form.*/
 
 // Specify that the server will return a JSON response
 header('Content-Type: application/json');
