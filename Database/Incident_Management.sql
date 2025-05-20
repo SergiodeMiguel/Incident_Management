@@ -12,14 +12,29 @@ CREATE DATABASE IF NOT EXISTS incident_managementdb;
 USE incident_managementdb;
 
 -- Drop the tables if they exist to avoid conflicts
+DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS incidents;
+DROP TABLE IF EXISTS updates;
+
+-- Create the roles table to store user roles
+-- This table will define the roles of users in the system (e.g., Admin, User)
+CREATE TABLE roles (
+  id INT AUTO_INCREMENT PRIMARY KEY, -- Unique ID for each role
+  name CHAR(5)                  -- Role name (Admin, User)
+);
 
 -- Create the users table to store user information
 -- This table will store the users who can report incidents
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique ID for each user  
   name VARCHAR(100),                  -- User's name
-  email VARCHAR(100)                  -- User's email
+  email VARCHAR(100),                 -- User's email
+  role_id INT,                        -- ID of the user's role
+
+  FOREIGN KEY (role_id) REFERENCES roles(id) -- Foreign key to link to the roles table
 );
 
 -- Create the categorias table to store incident categories
@@ -47,7 +62,12 @@ CREATE TABLE incidents (
   department_id INT,                 -- ID of the department assigned to the incident
   assigned_user_id INT,              -- ID of the user currently assigned to handle it
   status VARCHAR(50),                -- Incident status (e.g., Open, Closed)
-  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Date when the incident was created
+  creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Date when the incident was created
+
+  FOREIGN KEY (user_id) REFERENCES users(id),             -- Foreign key to link to the users table
+  FOREIGN KEY (category_id) REFERENCES categories(id),    -- Foreign key to link to the categories table
+  FOREIGN KEY (department_id) REFERENCES departments(id), -- Foreign key to link to the departments table
+  FOREIGN KEY (assigned_user_id) REFERENCES users(id)     -- Foreign key to link to the users table
 );
 
 -- Create the actualizaciones table to store updates on incidents
@@ -59,19 +79,28 @@ CREATE TABLE updates (
   assigned_user_id INT,              -- ID of the new user assigned (if changed)
   comment TEXT,                      -- Comment or update on the incident
   new_status VARCHAR(50),            -- New status of the incident (e.g., In Progress, Resolved)
-  date TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Date when the update was made
+  date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Date when the update was made
+
+  FOREIGN KEY (incident_id) REFERENCES incidents(id), -- Foreign key to link to the incidents table
+  FOREIGN KEY (user_id) REFERENCES users(id),         -- Foreign key to link to the users table
+  FOREIGN KEY (assigned_user_id) REFERENCES users(id) -- Foreign key to link to the users table
 );
 
--- Insert sample data into the users table
--- This data will be used for testing and demonstration purposes
-INSERT INTO users (name, email) VALUES 
-  ('Ana Pérez', 'ana@example.com'),
-  ('Carlos Ruiz', 'carlos@example.com');
+-- Insert data into the roles table
+INSERT INTO roles (name) VALUES 
+  ('Admin'), 
+  ('User');
 
--- Insert sample data into the categories table
+-- Insert data into the users table
+-- This data will be used for testing and demonstration purposes
+INSERT INTO users (name, email, role_id) VALUES 
+  ('Sergio', 'sergio@example.com', 1),
+  ('Sam', 'sam@example.com', 2);
+
+-- Insert data into the categories table
 -- This data will be used to categorize incidents
 INSERT INTO categories (name) VALUES ('Hardware'), ('Software'), ('Network');
 
--- Insert sample data into the departments table
+-- Insert data into the departments table
 -- This data will be used to categorize incidents by department
 INSERT INTO departments (name) VALUES ('IT'), ('Support'), ('Development');
