@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Incident Management - Home</title>
+  <script src="logo.js" defer></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <!-- Navbar: Main navigation bar -->
+  <header>
+    <nav class="navbar">
+      <!-- Add the logo image -->
+      <div class="nav-logo">
+        <img src="logo-transparent.png" alt="App Logo" class="logo-image" />
+        <span>Incident Management</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="Home.html">Home</a></li>
+        <li><a href="Create_Incident.html">Create Incident</a></li>
+        <li><a href="My_Incidents.html">My Incidents</a></li>
+        <li><a href="Support.html">Support</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <!-- Main content container -->
+  <main class="container">
+    <!-- Welcome message. Username is dynamically inserted with JS -->
+    <section class="welcome">
+      <h2 id="welcome-message">Hello, user.</h2>
+      <p>Welcome to InSergo Incident Management System.</p>
+    </section>
+
+    <!-- Summary Cards: Open/Closed incidents -->
+    <section class="stats-cards">
+      <div class="card">
+        <h3>Open Incidents</h3>
+        <p id="open-count">0</p>
+      </div>
+      <div class="card">
+        <h3>Closed Incidents</h3>
+        <p id="closed-count">0</p>
+      </div>
+    </section>
+
+    <!-- Button to create a new incident again (primary action) -->
+    <div class="actions">
+      <a href="Create_Incident.html" class="primary-button">+ Create New Incident</a>
+    </div>
+
+    <!-- Section with recent incidents -->
+    <section class="recent-incidents">
+      <div class="incidents-header">
+        <h3>Recent Incidents</h3>
+        <button onclick="window.location.href='All_Incidents.html'" class="secondary-button">See All Incidents</button>
+      </div>
+      <!-- Table to display latest incidents -->
+      <table class="incidents-table">
+        <thead>
+          <tr>
+            <th class="admin-only">ID</th> <!-- Hidden for non-admin -->
+            <th>Title</th>
+            <th>Status</th>
+            <th>Category</th>
+            <th>Department</th>
+            <th>Date</th>
+            <th>Actions</th> <!-- Edit / Delete -->
+          </tr>
+        </thead>
+        <tbody id="incident-list">
+          <!-- JS will populate rows dynamically -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 University Incident Tracker</p>
+    <p>Version 1.0 | <a href="Support.html">Support</a> | <a href="#">FAQ</a></p>
+  </footer>
+
+  <!-- JS script for dynamic loading -->
+  <script src="../JS/Home.js"></script>
+</body>
+</html>

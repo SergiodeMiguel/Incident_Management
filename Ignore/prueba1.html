@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - Incident Management System</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">Incident Manager XYZ</div>
+      <ul class="nav-links">
+        <li><a href="Home.html" class="active">Home</a></li>
+        <li><a href="Create_Incident.html">Create Incident</a></li>
+        <li><a href="My_Incidents.html">My Incidents</a></li>
+        <li><a href="mailto:support@university.edu">Support</a></li>
+        <li><a href="#" onclick="logout()">Log out</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="welcome">
+      <h1>Welcome, <span id="userName">User</span></h1>
+      <p>Track and manage your incidents efficiently with our modern dashboard</p>
+      <a class="button" href="Create_Incident.html">+ Create New Incident</a>
+    </section>
+
+    <section class="dashboard-stats">
+      <div class="stat-card">
+        Open Incidents
+        <span id="openCount">0</span>
+      </div>
+      <div class="stat-card">
+        In Progress
+        <span id="inProgressCount">0</span>
+      </div>
+      <div class="stat-card">
+        Closed Incidents
+        <span id="closedCount">0</span>
+      </div>
+    </section>
+
+    <section class="latest-incidents">
+      <h2>Latest Incidents</h2>
+      <div id="latestIncidents">
+        <!-- Sample incident cards - These will be replaced by JavaScript -->
+        <div class="incident-card">
+          <h3>Network Connectivity Issue</h3>
+          <p>Reported on: May 18, 2025</p>
+          <p>Category: Network</p>
+          <span class="incident-status status-open">Open</span>
+        </div>
+        
+        <div class="incident-card">
+          <h3>Software Installation Problem</h3>
+          <p>Reported on: May 17, 2025</p>
+          <p>Category: Software</p>
+          <span class="incident-status status-in-progress">In Progress</span>
+        </div>
+        
+        <div class="incident-card">
+          <h3>Password Reset Request</h3>
+          <p>Reported on: May 15, 2025</p>
+          <p>Category: Account</p>
+          <span class="incident-status status-closed">Closed</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Incident Manager XYZ - Version 1.0</p>
+    <p><a href="faq.html">FAQ</a> | <a href="privacy.html">Privacy Policy</a> | <a href="mailto:support@university.edu">Technical Support</a></p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Sample JavaScript to populate user data
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set user name (would normally come from authentication)
+      document.getElementById('userName').textContent = 'John Doe';
+      
+      // Set counts (would normally come from API)
+      document.getElementById('openCount').textContent = '3';
+      document.getElementById('inProgressCount').textContent = '2';
+      document.getElementById('closedCount').textContent = '8';
+      
+      // In a real application, you would fetch incidents from an API
+      // and dynamically create the incident cards
+    });
+    
+    function logout() {
+      // Logout functionality
+      alert('Logging out...');
+      // Redirect to login page
+      // window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

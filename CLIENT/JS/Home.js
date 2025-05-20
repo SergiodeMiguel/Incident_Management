@@ -5,15 +5,15 @@
 
 // Simulated data for the current user (will be replaced with real data once login is implemented)
 const currentUser = {
-  id: 3,                          // User ID
-  name: "John Doe",              // User name
-  role: "user"                   // User role ("user" or "admin")
+  id: 1,                          // User ID
+  name: "Sergio",                 // User name
+  role: "Admin"                   // User role ("user" or "admin")
 };
 
 // Waits until the DOM content is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
   const welcomeMsg = document.getElementById("welcome-message");
-  welcomeMsg.textContent = `Hello, ${currentUser.name}. Here you can report and track your incidents.`;
+  welcomeMsg.textContent = `Hello, ${currentUser.name}`;
 
   loadStats();
   loadRecentIncidents();
