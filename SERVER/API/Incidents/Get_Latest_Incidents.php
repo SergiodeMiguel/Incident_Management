@@ -50,12 +50,12 @@ if ($stmt = $conn->prepare($sql)) {
             'id' => $id,
             'title' => $title,
             'description' => $description,
-            'reported_by' => $reported_by,
-            'category' => $category,
-            'department' => $department,
-            'assigned_to' => $assigned_to,
-            'status' => $status,
-            'creation_date' => $formatted_date
+            'reported_by' => $reported_by,         // Name of the user who created the incident
+            'category' => $category,               // Name of the category
+            'department' => $department,           // Name of the department
+            'assigned_to' => $assigned_to,         // Name of the assigned user
+            'status' => $status,                   // Current status of the incident
+            'creation_date' => $formatted_date     // Formatted creation date
         ];
     }
 

@@ -1,60 +1,57 @@
 <?php
 /* Get_Incident_Stats.php
-   This script retrieves the count of open and closed incidents from the database
-   and returns it as a JSON response. */
+   Returns the total count of open and closed incidents for dashboard statistics.
+   Incidents with status 'Open' or 'In Progress' are considered open.
+   Incidents with status 'Closed' are considered closed.
+*/
 
-// Include database connection
-require_once '../../Includes/db_connection.php'; // Adjust path if necessary
+// Include the database connection file
+require_once '../../Includes/db_connection.php';
 
-// Set response header to JSON so client interprets it correctly
+// Set the response content type to JSON
 header('Content-Type: application/json');
 
-// Prepare the SQL queries to count open and closed incidents
-// We use prepared statements even if no parameters for consistency and security
+// Initialize response array
+$response = [
+    'open' => 0,
+    'closed' => 0
+];
 
-// Query to count open incidents
-$openIncidents = "SELECT COUNT(*) AS open_count FROM incidents WHERE status = 'Open'";
-// Query to count closed incidents
-$closedIncidents = "SELECT COUNT(*) AS closed_count FROM incidents WHERE status = 'Closed'";
+// SQL query to count incidents with status 'Open' or 'In Progress'
+$sql_open = "SELECT COUNT(*) FROM incidents WHERE status = 'Open' OR status = 'In Progress'";
 
-// Initialize variables to hold counts
-$openCount = 0;
-$closedCount = 0;
-
-// Execute the open incidents count query
-if ($stmtOpen = $conn->prepare($openIncidents)) {
-    // Execute statement
-    $stmtOpen->execute();
-    // Bind result to variable
-    $stmtOpen->bind_result($openCount);
-    // Fetch the result
-    $stmtOpen->fetch();
-    // Close statement to free resources
-    $stmtOpen->close();
+// Execute query for open incidents
+if ($stmt_open = $conn->prepare($sql_open)) {
+    $stmt_open->execute();
+    $stmt_open->bind_result($open_count);
+    $stmt_open->fetch();
+    $response['open'] = $open_count;
+    $stmt_open->close();
 } else {
-    // If statement preparation fails, return error and exit
+        // If statement preparation fails, return error and exit
     http_response_code(500);
-    echo json_encode(['error' => 'Failed to prepare open count query: ' . $conn->error]);
+    echo json_encode(['error' => 'Failed to prepare query for open incidents: ' . $conn->error]);
     exit;
 }
 
-// Execute the closed incidents count query
-if ($stmtClosed = $conn->prepare($closedIncidents)) {
-    $stmtClosed->execute();
-    $stmtClosed->bind_result($closedCount);
-    $stmtClosed->fetch();
-    $stmtClosed->close();
+// SQL query to count incidents with status 'Closed'
+$sql_closed = "SELECT COUNT(*) FROM incidents WHERE status = 'Closed'";
+
+// Execute query for closed incidents
+if ($stmt_closed = $conn->prepare($sql_closed)) {
+    $stmt_closed->execute();
+    $stmt_closed->bind_result($closed_count);
+    $stmt_closed->fetch();
+    $response['closed'] = $closed_count;
+    $stmt_closed->close();
 } else {
     http_response_code(500);
-    echo json_encode(['error' => 'Failed to prepare closed count query: ' . $conn->error]);
+    echo json_encode(['error' => 'Failed to prepare query for closed incidents: ' . $conn->error]);
     exit;
 }
 
-// Return the counts as JSON
-echo json_encode([
-    'open' => $openCount,
-    'closed' => $closedCount
-]);
+// Return the result as JSON
+echo json_encode($response);
 
 // Close the database connection
 $conn->close();

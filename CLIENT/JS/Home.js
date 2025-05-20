@@ -59,13 +59,18 @@ function loadRecentIncidents() {
 
         // Title
         const titleCell = document.createElement("td");
-        titleCell.textContent = incident.title;
+        titleCell.textContent = incident.title || "—"; // Displaying the title, defaulting to "—" if not available
         row.appendChild(titleCell);
 
         // Status
         const statusCell = document.createElement("td");
         statusCell.textContent = incident.status;
         row.appendChild(statusCell);
+
+        // Description
+        const descriptionCell = document.createElement("td");
+        descriptionCell.textContent = incident.description || "—"; // Displaying the description, defaulting to "—" if not available
+        row.appendChild(descriptionCell);
 
         // Category
         const categoryCell = document.createElement("td");
@@ -77,9 +82,20 @@ function loadRecentIncidents() {
         departmentCell.textContent = incident.department || "—";
         row.appendChild(departmentCell);
 
+        // Reported By – New column
+        const reportedByCell = document.createElement("td");
+        reportedByCell.textContent = incident.reported_by || "—";
+        row.appendChild(reportedByCell);
+
+        // Assigned To – New column
+        const assignedToCell = document.createElement("td");
+        assignedToCell.textContent = incident.assigned_to || "—";
+        row.appendChild(assignedToCell);
+
         // Date
         const dateCell = document.createElement("td");
-        dateCell.textContent = incident.date || "—";
+        const rawDate = new Date(incident.creation_date);
+        dateCell.textContent = rawDate.toLocaleDateString("en-GB"); // Format: DD/MM/YYYY
         row.appendChild(dateCell);
 
         // Actions
