@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Character encoding for the document -->
+  <meta charset="UTF-8" />
+
+  <!-- Responsive meta tag to scale for different devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Title that appears in the browser tab -->
+  <title>All Incidents</title>
+
+  <!-- Link to external CSS for styling this page -->
+  <link rel="stylesheet" href="../Assets/All_Incidents.css?v=1.0" />
+</head>
+<body>
+
+  <!-- Header section containing the navigation bar -->
+  <header>
+    <nav class="navbar">
+      <!-- Logo and application name -->
+      <div class="nav-logo">
+        <img src="../Assets/Logo/logo-transparent.png" alt="App Logo" class="logo-image" /> <!-- Application logo image -->
+        <span>Incident Management</span> <!-- Application name -->
+      </div>
+
+      <!-- Navigation links to other pages -->
+      <ul class="nav-links">
+        <li><a href="Home.html">Home</a></li> <!-- Link to Home page -->
+        <li><a href="Create_Incident.html">Create Incident</a></li> <!-- Link to form for creating a new incident -->
+        <li><a href="My_Incidents.html">My Incidents</a></li> <!-- Link to the user's own reported incidents -->
+        <li><a href="Support.html">Support</a></li> <!-- Link to the support/help page -->
+        <li><a href="#" onclick="logout()">Logout</a></li> <!-- Logout link with a JS handler -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main content container -->
+  <main class="container">
+    
+    <!-- Section displaying all incidents in a table format -->
+    <section class="all-incidents">
+
+      <!-- Header section for the incidents list -->
+      <div class="incidents-header">
+        <h3>All Incidents</h3> <!-- Section title -->
+        <button 
+          onclick="window.location.href='Create_Incident.html'" 
+          class="primary-button"
+        >
+          + Create New Incident
+        </button> <!-- Button that navigates to create incident page -->
+      </div>
+
+      <!-- Table showing incident details -->
+      <table class="incidents-table">
+        <thead>
+          <tr>
+            <!-- Column headers for incident fields -->
+            <th class="admin-only">ID</th> <!-- ID column only visible to admin users -->
+            <th>Title</th> <!-- Incident title -->
+            <th>Status</th> <!-- Incident status (e.g., Open, Closed) -->
+            <th>Description</th> <!-- Short description of the issue -->
+            <th>Category</th> <!-- Category such as Hardware, Software, etc. -->
+            <th>Department</th> <!-- Department responsible for the incident -->
+            <th>Reported By</th> <!-- User who reported the incident -->
+            <th>Assigned To</th> <!-- User assigned to resolve the incident -->
+            <th>Date</th> <!-- Date the incident was created -->
+            <th>Actions</th> <!-- Actions like edit or delete -->
+          </tr>
+        </thead>
+        <tbody id="all-incident-list">
+          <!-- Table rows will be dynamically generated and inserted here by JavaScript -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Footer section with version info and support link -->
+  <footer class="footer">
+    <p>© 2025 University Incident Tracker</p> <!-- Copyright -->
+    <p>Version 1.0 | <a href="Support.html">Support</a></p> <!-- Support link -->
+  </footer>
+
+  <!-- JavaScript file that fetches and displays incident data -->
+  <script src="../JS/All_Incidents.js"></script>
+</body>
+</html>

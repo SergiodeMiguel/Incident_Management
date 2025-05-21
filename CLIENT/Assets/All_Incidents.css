@@ -1,0 +1,12 @@
+@import url('Home.css');
+
+/* You can override or extend styles here if needed */
+
+/* Example override to ensure spacing is similar */
+.all-incidents {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}

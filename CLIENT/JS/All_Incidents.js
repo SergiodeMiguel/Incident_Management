@@ -3,33 +3,34 @@
    It also supports admin-only columns and allows deletion of incidents via a confirmation dialog.
 */
 
-// Simulated data for the current user (will be replaced with real data once login is implemented)
 const currentUser = {
   id: 1,                          // User ID
   name: "Sergio",                 // User name
   role: "Admin"                   // User role ("user" or "admin")
 };
 
-// Waits until the DOM content is fully loaded
+// Waits for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", () => {
   // Show admin-only columns if user is admin
-  if (currentUser.role === "admin") {
+  if (currentUser.role.toLowerCase() === "admin") {
     document.querySelectorAll(".admin-only").forEach(el => {
-      el.style.display = "table-cell";
+      el.style.display = "table-cell"; // Display admin-only elements
     });
   }
 
-  loadAllIncidents();  // Call function to load incidents after page load
+  // Load all incidents
+  loadAllIncidents();
 });
 
-// Function to load and display all incidents from the backend
+// Function to load and display all incidents in the table
 function loadAllIncidents() {
-  fetch("../../SERVER/API/Incidents/All_Incidents.php")
+  fetch("../../SERVER/API/Incidents/All_Incidents.php") // Fetch incidents from API
     .then(response => {
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-      return response.json();
+      return response.json(); // Parse the response as JSON
     })
     .then(responseData => {
+      // Check if the response is successful
       if (!responseData.success) {
         console.error("Server error:", responseData.message, responseData.error);
         alert("Error loading incidents.");
@@ -38,25 +39,25 @@ function loadAllIncidents() {
 
       const incidents = responseData.data;
       const tableBody = document.getElementById("all-incident-list");
-      tableBody.innerHTML = "";  // Clear previous incidents
+      tableBody.innerHTML = ""; // Clear previous data
 
-      // Handle case where no incidents are found
+      // If no incidents found, display message
       if (incidents.length === 0) {
         const noDataRow = document.createElement("tr");
         const noDataCell = document.createElement("td");
         noDataCell.colSpan = 10;
-        noDataCell.textContent = "No incidents found.";
+        noDataCell.textContent = "No incidents found."; // No incidents message
         noDataRow.appendChild(noDataCell);
         tableBody.appendChild(noDataRow);
         return;
       }
 
-      // Render each incident in the table
+      // Loop through incidents and create rows in the table
       incidents.forEach(incident => {
         const row = document.createElement("tr");
 
-        // Admin-only ID column
-        if (currentUser.role === "admin") {
+        // Admin-only column: Display ID
+        if (currentUser.role.toLowerCase() === "admin") {
           const idCell = document.createElement("td");
           idCell.textContent = incident.id;
           row.appendChild(idCell);
@@ -64,40 +65,40 @@ function loadAllIncidents() {
 
         // Title column
         const titleCell = document.createElement("td");
-        titleCell.textContent = incident.title || "—";
+        titleCell.textContent = incident.title || "—"; // Display "—" if title is not available
         row.appendChild(titleCell);
 
-        // Status column (No color circle, just status text)
+        // Status column (without color circle)
         const statusCell = document.createElement("td");
-        statusCell.textContent = incident.status; // Only display status text without the colored circle
+        statusCell.textContent = incident.status; // Just the status text, no circle
         row.appendChild(statusCell);
 
         // Description column
         const descriptionCell = document.createElement("td");
-        descriptionCell.textContent = incident.description || "—";
+        descriptionCell.textContent = incident.description || "—"; // Display "—" if description is not available
         row.appendChild(descriptionCell);
 
         // Category column
         const categoryCell = document.createElement("td");
-        categoryCell.textContent = incident.category || "—";
+        categoryCell.textContent = incident.category || "—"; // Display "—" if category is not available
         row.appendChild(categoryCell);
 
         // Department column
         const departmentCell = document.createElement("td");
-        departmentCell.textContent = incident.department || "—";
+        departmentCell.textContent = incident.department || "—"; // Display "—" if department is not available
         row.appendChild(departmentCell);
 
         // Reported By column
         const reportedByCell = document.createElement("td");
-        reportedByCell.textContent = incident.reported_by || "—";
+        reportedByCell.textContent = incident.reported_by || "—"; // Display "—" if reported_by is not available
         row.appendChild(reportedByCell);
 
         // Assigned To column
         const assignedToCell = document.createElement("td");
-        assignedToCell.textContent = incident.assigned_to || "—";
+        assignedToCell.textContent = incident.assigned_to || "—"; // Display "—" if assigned_to is not available
         row.appendChild(assignedToCell);
 
-        // Date column (formatted)
+        // Date column (formatted as DD/MM/YYYY)
         const dateCell = document.createElement("td");
         const rawDate = new Date(incident.created_at);
         dateCell.textContent = isNaN(rawDate.getTime()) ? "—" : rawDate.toLocaleDateString("en-GB");
@@ -111,7 +112,7 @@ function loadAllIncidents() {
         editBtn.textContent = "Edit";
         editBtn.className = "edit-btn action-btn";
         editBtn.onclick = () => {
-          window.location.href = `Edit_Incident.html?id=${incident.id}`;
+          window.location.href = `Edit_Incident.html?id=${incident.id}`; // Redirect to Edit page
         };
         actionsCell.appendChild(editBtn);
 
@@ -119,40 +120,44 @@ function loadAllIncidents() {
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Delete";
         deleteBtn.className = "delete-btn action-btn";
-        deleteBtn.onclick = () => confirmDelete(incident.id);  // Confirm deletion before proceeding
+        deleteBtn.onclick = () => confirmDelete(incident.id); // Trigger delete confirmation
         actionsCell.appendChild(deleteBtn);
 
-        row.appendChild(actionsCell);
-        tableBody.appendChild(row);  // Add the row to the table body
+        row.appendChild(actionsCell); // Append actions column to row
+        tableBody.appendChild(row); // Append row to table body
       });
     })
     .catch(error => {
-      console.error("Fetch error:", error);
+      console.error("Fetch error:", error); // Log error if something goes wrong
       alert("Failed to load incidents. Check console for details.");
     });
 }
 
-// Function to confirm and delete an incident
+// Function to confirm deletion and perform the actual deletion
 function confirmDelete(id) {
   if (confirm("Are you sure you want to delete this incident?")) {
-    fetch(`../../SERVER/API/Incidents/Delete_Incident.php?id=${id}`, {
-      method: "DELETE", // Ensure DELETE method is used
+    console.log("Attempting to delete incident with ID:", id); // Debugging line to see the ID being sent
+
+    // Send DELETE request to API with incident ID in the body
+    fetch(`../../SERVER/API/Incidents/Delete_Incident.php`, {
+      method: "DELETE",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json", // Set request content type to JSON
       },
+      body: JSON.stringify({ id: id }) // Send the ID in the body of the request
     })
-      .then(response => response.json())
+      .then(response => response.json()) // Parse the JSON response
       .then(data => {
-        console.log("Delete response:", data);  // Log the response for debugging
+        console.log("Delete response:", data); // Debugging the response from the server
         if (data.success) {
           alert("Incident deleted successfully.");
-          loadAllIncidents();  // Reload incidents after deletion
+          loadAllIncidents(); // Reload incidents after deletion
         } else {
-          alert("Error deleting incident: " + data.message);
+          alert("Error deleting incident: " + data.message); // Show error message if deletion fails
         }
       })
       .catch(error => {
-        console.error("Delete error:", error);
+        console.error("Delete error:", error); // Log error if something goes wrong
         alert("Error deleting incident. Check console for details.");
       });
   }

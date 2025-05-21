@@ -129,16 +129,20 @@ function loadRecentIncidents() {
 // Function to confirm and delete an incident
 function confirmDelete(id) {
   if (confirm("Are you sure you want to delete this incident?")) {
-    fetch(`../../SERVER/API/Incidents/Delete_Incident.php?id=${id}`, {
-      method: "DELETE"
+    fetch("../../SERVER/API/Incidents/Delete_Incident.php", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json", // Establece el tipo de contenido como JSON
+      },
+      body: JSON.stringify({ id: id }) // Envía el ID en el cuerpo de la solicitud
     })
       .then(response => response.json())
       .then(data => {
         if (data.success) {
           alert("Incident deleted successfully.");
-          loadRecentIncidents();
+          loadRecentIncidents();  // Vuelve a cargar las incidencias después de la eliminación
         } else {
-          alert("Error deleting incident.");
+          alert("Error deleting incident: " + data.message); // Muestra el mensaje de error
         }
       })
       .catch(error => {

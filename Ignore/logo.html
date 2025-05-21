@@ -1,90 +1,94 @@
+<!-- FORM PAGE TO CREATE NEW INCIDENTS
+     This page contains the form where users can report new incidents.
+     Includes input fields for title, description, status and server-filled drop-downs for users, departments and categories.-->
+     
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Incident Management - Home</title>
+  <meta charset="UTF-8">
+  <title>Create Incident</title> <!-- Page title shown in browser tab -->
+  
+  <!-- External JavaScript file is linked with the 'defer' attribute, which means it will load after the HTML -->
   <script src="logo.js" defer></script>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=1.0" /> <!-- Link to external CSS file for styling -->
 </head>
 <body>
-    <!-- Navbar: Main navigation bar -->
-  <header>
-    <nav class="navbar">
-      <!-- Add the logo image -->
-      <div class="nav-logo">
-        <img src="logo-transparent.png" alt="App Logo" class="logo-image" />
-        <span>Incident Management</span>
+    <!-- Navbar Section -->
+    <header>
+      <div class="navbar">
+        <div class="nav-logo">
+          <img src="../Assets/Logo/logo-transparent.png" alt="Logo" class="logo-image" />
+          <span>Incident Management</span>
+        </div>
+        <ul class="nav-links">
+          <li><a href="home.html">Home</a></li>
+          <li><a href="create_incident.html">Create Incident</a></li>
+          <li><a href="incidents.html">View Incidents</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
       </div>
-      <ul class="nav-links">
-        <li><a href="Home.html">Home</a></li>
-        <li><a href="Create_Incident.html">Create Incident</a></li>
-        <li><a href="My_Incidents.html">My Incidents</a></li>
-        <li><a href="Support.html">Support</a></li>
-        <li><a href="#" onclick="logout()">Logout</a></li>
-      </ul>
-    </nav>
-  </header>
+    </header>
 
+    <div class="container">
+    <!-- Main heading of the page -->
+        <h1>Incident Management System</h1>
+        <h2>Create New Incident</h2>
 
-  <!-- Main content container -->
-  <main class="container">
-    <!-- Welcome message. Username is dynamically inserted with JS -->
-    <section class="welcome">
-      <h2 id="welcome-message">Hello, user.</h2>
-      <p>Welcome to InSergo Incident Management System.</p>
-    </section>
+    <!-- Form for submitting a new incident -->
+        <form id="incident-form">
 
-    <!-- Summary Cards: Open/Closed incidents -->
-    <section class="stats-cards">
-      <div class="card">
-        <h3>Open Incidents</h3>
-        <p id="open-count">0</p>
-      </div>
-      <div class="card">
-        <h3>Closed Incidents</h3>
-        <p id="closed-count">0</p>
-      </div>
-    </section>
+    <!-- Text input for the title of the incident -->
+        <label for="title">Title</label>
+        <input type="text" name="title" required /> <!-- 'required' attribute ensures that the title field must be filled in before submission -->
+    
+    <!-- Text area for a description of the incident -->
+        <label for="description">Description</label>
+        <textarea name="description" rows="4" required></textarea>
+        <span class="form-hint">Provide detailed information about the incident</span>
 
-    <!-- Button to create a new incident again (primary action) -->
-    <div class="actions">
-      <a href="Create_Incident.html" class="primary-button">+ Create New Incident</a>
+    <!-- Dropdown to select the user reporting the incident  -->
+        <label for="user">Reported By</label>
+        <select id="user" name="user" required>
+            <option value="" disabled selected hidden>Select user</option>
+        </select>
+        <span class="form-hint">Select the person who reports this incident</span>
+
+    <!-- Dropdown to select the user assigned to resolve the incident -->
+        <label for="assigned_user">Assigned To</label>
+        <select id="assigned_user" name="assigned_user" required>
+            <option value="" disabled selected hidden>Select user</option>
+        </select>
+        <span class="form-hint">Select the person responsible for handling this incident</span>
+
+    <!-- Categories dropdown from DB -->
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+            <option value="" disabled selected hidden>Select category</option>
+        </select>
+        <span class="form-hint">Select the categorie of the incident</span>
+
+    <!-- Departments dropdown from DB -->
+        <label for="department">Department</label>
+        <select id="department" name="department" required>
+            <option value="" disabled selected hidden>Select department</option>
+        </select>
+        <span class="form-hint">Select the department that is affected</span>
+
+    <!-- Static status for now -->
+        <label for="status">Status</label>
+        <select id="status" name="status" required>
+            <option value="" disabled selected hidden>Select status</option>
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Closed">Closed</option>
+        </select>
+        <span class="form-hint">Select the person status of the incident</span>
+
+    <!-- Submit button to send the information -->
+        <button type="submit">Add Incident</button>
+    <!-- Reset button to clear the form -->
+        <button type="reset">Reset</button>
     </div>
-
-    <!-- Section with recent incidents -->
-    <section class="recent-incidents">
-      <div class="incidents-header">
-        <h3>Recent Incidents</h3>
-        <button onclick="window.location.href='All_Incidents.html'" class="secondary-button">See All Incidents</button>
-      </div>
-      <!-- Table to display latest incidents -->
-      <table class="incidents-table">
-        <thead>
-          <tr>
-            <th class="admin-only">ID</th> <!-- Hidden for non-admin -->
-            <th>Title</th>
-            <th>Status</th>
-            <th>Category</th>
-            <th>Department</th>
-            <th>Date</th>
-            <th>Actions</th> <!-- Edit / Delete -->
-          </tr>
-        </thead>
-        <tbody id="incident-list">
-          <!-- JS will populate rows dynamically -->
-        </tbody>
-      </table>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <p>© 2025 University Incident Tracker</p>
-    <p>Version 1.0 | <a href="Support.html">Support</a> | <a href="#">FAQ</a></p>
-  </footer>
-
-  <!-- JS script for dynamic loading -->
-  <script src="../JS/Home.js"></script>
+  </form>
 </body>
 </html>

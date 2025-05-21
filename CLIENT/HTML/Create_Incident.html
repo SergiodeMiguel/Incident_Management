@@ -8,8 +8,6 @@
   <meta charset="UTF-8">
   <title>Create Incident</title> <!-- Page title shown in browser tab -->
   
-  <!-- External JavaScript file is linked with the 'defer' attribute, which means it will load after the HTML -->
-  <script src="../JS/Create_Incident.js " defer></script>
   <link rel="stylesheet" href="../Assets/Create_Incident_Form.css?v=1.0" /> <!-- Link to external CSS file for styling -->
 
 </head>
@@ -21,11 +19,12 @@
           <img src="../Assets/Logo/logo-transparent.png" alt="Logo" class="logo-image" />
           <span>Incident Management</span>
         </div>
-        <ul class="nav-links">
-          <li><a href="home.html">Home</a></li>
-          <li><a href="create_incident.html">Create Incident</a></li>
-          <li><a href="incidents.html">View Incidents</a></li>
-          <li><a href="contact.html">Contact</a></li>
+      <ul class="nav-links">
+        <li><a href="Home.html">Home</a></li> <!-- Link to the home page -->
+        <li><a href="Create_Incident.html">Create Incident</a></li> <!-- Link to the incident creation form -->
+        <li><a href="My_Incidents.html">My Incidents</a></li> <!-- Link to the user’s own incidents -->
+        <li><a href="Support.html">Support</a></li> <!-- Link to support page -->
+        <li><a href="#" onclick="logout()">Logout</a></li> <!-- Logout link with JavaScript function -->
         </ul>
       </div>
     </header>
@@ -91,5 +90,7 @@
         <button type="reset">Reset</button>
     </div>
   </form>
+    <!-- External JavaScript file is linked with the 'defer' attribute, which means it will load after the HTML -->
+  <script src="../JS/Create_Incident.js " defer></script>
 </body>
 </html>
