@@ -2,6 +2,10 @@
    This script fetches all incidents from the backend and renders them into a dynamic table.
    It also supports admin-only columns and allows deletion of incidents via a confirmation dialog.
 */
+// Access protection: redirect to Login if not logged in
+if (localStorage.getItem("isLoggedIn") !== "true") {
+  window.location.href = "Login.html";
+}
 
 const currentUser = {
   id: 1,                          // User ID
@@ -161,4 +165,10 @@ function confirmDelete(id) {
         alert("Error deleting incident. Check console for details.");
       });
   }
+}
+
+// Logout function: clears session and redirects to Login
+function logout() {
+  localStorage.clear();
+  window.location.href = "../HTML/Login.html";
 }

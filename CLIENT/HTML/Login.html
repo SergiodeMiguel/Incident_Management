@@ -1,0 +1,31 @@
+<!-- 
+  LOGIN FORM PAGE
+  This page provides a login form that collects the username and password,
+  and calls a JavaScript function to authenticate the user via the login API.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Incident Management</title>
+  <link rel="stylesheet" href="../Assets/Login.css">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="user">Username:</label>
+      <input type="text" id="user" name="user" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Login</button>
+    </form>
+    <p id="error-message" style="color: red;"></p>
+  </div>
+
+  <script src="../JS/Login.js"></script>
+</body>
+</html>

@@ -4,6 +4,12 @@
    and redirects the user to the incident list page upon successful update.
 */
 
+// Access protection: redirect to Login if not logged in
+if (localStorage.getItem("isLoggedIn") !== "true") {
+  window.location.href = "Login.html";
+}
+
+
 // Wait until the entire HTML document is fully loaded and parsed
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -117,3 +123,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     form.status.value = data.status;           // Set the status select
   }
 });
+
+// Logout function: clears session and redirects to Login
+function logout() {
+  localStorage.clear();
+  window.location.href = "../HTML/Login.html";
+}

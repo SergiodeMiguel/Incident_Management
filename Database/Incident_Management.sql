@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS updates;
 -- This table will define the roles of users in the system (e.g., Admin, User)
 CREATE TABLE roles (
   id INT AUTO_INCREMENT PRIMARY KEY, -- Unique ID for each role
-  name CHAR(5)                  -- Role name (Admin, User)
+  name CHAR(50)                      -- Role name (Admin, User)
 );
 
 -- Create the users table to store user information
@@ -31,7 +31,8 @@ CREATE TABLE roles (
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique ID for each user  
   name VARCHAR(100),                  -- User's name
-  email VARCHAR(100),                 -- User's email
+  password VARCHAR(255),              -- password storage
+  email VARCHAR(100) UNIQUE,          -- User's email
   role_id INT,                        -- ID of the user's role
 
   FOREIGN KEY (role_id) REFERENCES roles(id) -- Foreign key to link to the roles table
@@ -93,9 +94,9 @@ INSERT INTO roles (name) VALUES
 
 -- Insert data into the users table
 -- This data will be used for testing and demonstration purposes
-INSERT INTO users (name, email, role_id) VALUES 
-  ('Sergio', 'sergio@example.com', 1),
-  ('Sam', 'sam@example.com', 2);
+INSERT INTO users (name, email, password, role_id) VALUES 
+  ('Sergio', 'sergio.de-miguel-g@yorksj.ac.uk', '1234', 1),
+  ('Sam', 's.memon@yorksj.ac.uk', '1234', 2);
 
 -- Insert data into the categories table
 -- This data will be used to categorize incidents

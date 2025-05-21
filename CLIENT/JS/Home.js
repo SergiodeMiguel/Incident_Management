@@ -3,15 +3,27 @@
    such as personalized messages, statistics, and a list of recent incidents.
 */
 
-// Simulated data for the current user (will be replaced with real data once login is implemented)
-const currentUser = {
-  id: 1,                          // User ID
-  name: "Sergio",                 // User name
-  role: "Admin"                   // User role ("user" or "admin")
-};
-
 // Waits until the DOM content is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
+
+  // Access protection: redirect to Login if not logged in
+
+  console.log("isLoggedIn:", localStorage.getItem("isLoggedIn")); // DEBUG
+  console.log("user:", localStorage.getItem("user")); // DEBUG
+
+  if (localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "Login.html";
+  }
+
+
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+
+  if (!currentUser) {
+    // If somehow user is missing, treat as not logged in
+    localStorage.clear();
+    window.location.href = "Login.html";
+  }
+  
   const welcomeMsg = document.getElementById("welcome-message");
   welcomeMsg.textContent = `Hello, ${currentUser.name}`;
 
@@ -149,4 +161,10 @@ function confirmDelete(id) {
         console.error("Delete request failed:", error);
       });
   }
+}
+
+// Logout function: clears session and redirects to Login
+function logout() {
+  localStorage.clear();
+  window.location.href = "../HTML/Login.html";
 }

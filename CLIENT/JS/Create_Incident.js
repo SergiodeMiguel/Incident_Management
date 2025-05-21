@@ -3,6 +3,11 @@
    handles form submission via POST to the server API,
    and redirects to the success page upon successful incident insertion.*/
 
+// Access protection: redirect to Login if not logged in
+if (localStorage.getItem("isLoggedIn") !== "true") {
+  window.location.href = "Login.html";
+}
+
 
 // Wait until the entire HTML document is fully loaded and parsed
 document.addEventListener('DOMContentLoaded', () => {
@@ -83,3 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(err => alert('Error: ' + err)); // Show any network or server error that occurred
   });
 });
+
+// Logout function: clears session and redirects to Login
+function logout() {
+  localStorage.clear();
+  window.location.href = "../HTML/Login.html";
+}
