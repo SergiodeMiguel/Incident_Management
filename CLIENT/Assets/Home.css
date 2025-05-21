@@ -337,6 +337,10 @@ header {
   display: none;
 }
 
+.admin-visible {
+  display: table-cell !important;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .navbar {

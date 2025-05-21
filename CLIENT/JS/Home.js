@@ -3,6 +3,17 @@
    such as personalized messages, statistics, and a list of recent incidents.
 */
 
+  // Retrieve user info from localStorage
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+  
+  // Map role_id to a readable role name
+  // This allows later checks like: if (currentUser.role === "admin")
+  if (currentUser.role_id === 1) {
+    currentUser.role = "admin";
+  } else {
+    currentUser.role = "user"; // or another role name if needed
+  }
+
 // Waits until the DOM content is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -15,9 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "Login.html";
   }
 
-
-  const currentUser = JSON.parse(localStorage.getItem("user"));
-
+  // Redirect to login page if no user is logged in
   if (!currentUser) {
     // If somehow user is missing, treat as not logged in
     localStorage.clear();
@@ -27,13 +36,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const welcomeMsg = document.getElementById("welcome-message");
   welcomeMsg.textContent = `Hello, ${currentUser.name}`;
 
+  /* Function calls like loadRecentIncidents() work here even though the function is defined later.
+     This is possible because we use a classic function declaration (function loadRecentIncidents() {...}),
+     which is hoisted entirely to the top of the scope during compilation.*/
   loadStats();
   loadRecentIncidents();
 
   // Show admin-only columns if user is admin
   if (currentUser.role === "admin") {
+  document.querySelectorAll(".admin-only").forEach(el => {
+    el.classList.add("admin-visible");
+    });
+  } else {
+    // Ensure admin-only elements remain hidden if not admin
     document.querySelectorAll(".admin-only").forEach(el => {
-      el.style.display = "table-cell";
+    el.classList.remove("admin-visible");
     });
   }
 });
