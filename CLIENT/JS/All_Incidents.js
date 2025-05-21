@@ -2,25 +2,48 @@
    This script fetches all incidents from the backend and renders them into a dynamic table.
    It also supports admin-only columns and allows deletion of incidents via a confirmation dialog.
 */
-// Access protection: redirect to Login if not logged in
-if (localStorage.getItem("isLoggedIn") !== "true") {
-  window.location.href = "Login.html";
-}
 
-const currentUser = {
-  id: 1,                          // User ID
-  name: "Sergio",                 // User name
-  role: "Admin"                   // User role ("user" or "admin")
-};
+  // Retrieve user info from localStorage
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+  
+  // Map role_id to a readable role name
+  // This allows later checks like: if (currentUser.role === "admin")
+  if (currentUser.role_id === 1) {
+    currentUser.role = "admin";
+  } else {
+    currentUser.role = "user"; // or another role name if needed
+  }
 
-// Waits for the DOM content to be fully loaded
+// Waits until the DOM content is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
+
+  // Access protection: redirect to Login if not logged in
+
+  console.log("isLoggedIn:", localStorage.getItem("isLoggedIn")); // DEBUG
+  console.log("user:", localStorage.getItem("user")); // DEBUG
+
+  if (localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "Login.html";
+  }
+
+  // Redirect to login page if no user is logged in
+  if (!currentUser) {
+    // If somehow user is missing, treat as not logged in
+    localStorage.clear();
+    window.location.href = "Login.html";
+  }
+  
   // Show admin-only columns if user is admin
-  if (currentUser.role.toLowerCase() === "admin") {
+  if (currentUser.role === "admin") {
     document.querySelectorAll(".admin-only").forEach(el => {
-      el.style.display = "table-cell"; // Display admin-only elements
+      el.classList.add("admin-visible"); // Muestra columnas admin
+    });
+  } else {
+    document.querySelectorAll(".admin-only").forEach(el => {
+      el.classList.remove("admin-visible"); // Oculta columnas admin
     });
   }
+
 
   // Load all incidents
   loadAllIncidents();
