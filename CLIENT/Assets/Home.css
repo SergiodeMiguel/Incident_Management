@@ -34,7 +34,7 @@ body {
 
 /* Header and Navigation */
 header {
-  background-color: #2b3a55; /* Color original del header */
+  background-color: #2b3a55;
   box-shadow: var(--shadow);
   position: sticky;
   top: 0;
