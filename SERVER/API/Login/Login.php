@@ -7,7 +7,7 @@
   manages session creation upon successful login,
   and returns JSON responses indicating success or failure.
 */
-
+/* 
 // Set response header to JSON as this API returns JSON responses
 header('Content-Type: application/json');
 
@@ -85,3 +85,4 @@ if ($userData = $result->fetch_assoc()) {
 // Close statement and connection to free resources
 $stmt->close();
 $conn->close();
+ */

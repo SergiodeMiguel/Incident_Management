@@ -1,8 +1,8 @@
-/* 
+/*  OWN LOGIN JS. IN CASE OF NOT USING KEYCLOAK, THIS FILE IS USED.
   JAVASCRIPT FOR LOGIN FORM
   This script handles the login form submission, sends the user and password
   as a POST request to the server, and handles success or error responses.
-*/
+
 
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
   e.preventDefault(); // Prevent default form submission behavior
@@ -41,4 +41,4 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     console.error('Login request failed:', error);
     document.getElementById('error-message').textContent = 'An error occurred. Please try again.';
   }
-});
+}); */

@@ -1,7 +1,10 @@
 /* ALL_INCIDENTS.JS – Script to load and display all incidents
    This script fetches all incidents from the backend and renders them into a dynamic table.
    It also supports admin-only columns and allows deletion of incidents via a confirmation dialog.
-*/
+*/// Access protection: redirect to Login if not logged in
+if (localStorage.getItem("isLoggedIn") !== "true") {
+  window.location.href = "Login.html";
+}
 
   // Retrieve user info from localStorage
   const currentUser = JSON.parse(localStorage.getItem("user"));

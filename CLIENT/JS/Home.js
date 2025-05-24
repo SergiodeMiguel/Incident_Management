@@ -3,37 +3,32 @@
    such as personalized messages, statistics, and a list of recent incidents.
 */
 
-  // Retrieve user info from localStorage
-  const currentUser = JSON.parse(localStorage.getItem("user"));
-  
-  // Map role_id to a readable role name
-  // This allows later checks like: if (currentUser.role === "admin")
-  if (currentUser.role_id === 1) {
-    currentUser.role = "admin";
-  } else {
-    currentUser.role = "user"; // or another role name if needed
-  }
+// Retrieve user info from localStorage
+const currentUser = JSON.parse(localStorage.getItem("user"));
 
+// Map role_id to a readable role name
+// This allows later checks like: if (currentUser.role === "admin")
+  if (!currentUser || !currentUser.role) {
+    // Por seguridad, limpia y redirige al login
+    localStorage.clear();
+    window.location.href = "Login.html";
+  }
 // Waits until the DOM content is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
 
   // Access protection: redirect to Login if not logged in
-
   console.log("isLoggedIn:", localStorage.getItem("isLoggedIn")); // DEBUG
   console.log("user:", localStorage.getItem("user")); // DEBUG
 
-  if (localStorage.getItem("isLoggedIn") !== "true") {
-    window.location.href = "Login.html";
-  }
-
-  // Redirect to login page if no user is logged in
-  if (!currentUser) {
-    // If somehow user is missing, treat as not logged in
+  if (localStorage.getItem("isLoggedIn") !== "true" || !currentUser) {
+    // New comment: If user is not logged in or user data is missing, clear storage and redirect to login
     localStorage.clear();
     window.location.href = "Login.html";
+    return; // Prevent further execution
   }
-  
+
   const welcomeMsg = document.getElementById("welcome-message");
+  // New comment: Display welcome message with user name dynamically
   welcomeMsg.textContent = `Hello, ${currentUser.name}`;
 
   /* Function calls like loadRecentIncidents() work here even though the function is defined later.
@@ -43,14 +38,15 @@ document.addEventListener("DOMContentLoaded", () => {
   loadRecentIncidents();
 
   // Show admin-only columns if user is admin
+  console.log("Usuario actual:", currentUser);
   if (currentUser.role === "admin") {
-  document.querySelectorAll(".admin-only").forEach(el => {
-    el.classList.add("admin-visible");
-    });
+    document.querySelectorAll(".admin-only").forEach(el => {
+      el.classList.add("admin-visible");
+    }); 
   } else {
     // Ensure admin-only elements remain hidden if not admin
     document.querySelectorAll(".admin-only").forEach(el => {
-    el.classList.remove("admin-visible");
+      el.classList.remove("admin-visible");
     });
   }
 });
@@ -86,60 +82,37 @@ function loadRecentIncidents() {
           row.appendChild(idCell);
         }
 
-        // Title
-        const titleCell = document.createElement("td");
-        titleCell.textContent = incident.title || "—"; // Displaying the title, defaulting to "—" if not available
-        row.appendChild(titleCell);
+        // Define the fields to display for all users
+        const fields = [
+          incident.title || "—", // Show dash if missing
+          incident.status,
+          incident.description || "—",
+          incident.category || "—",
+          incident.department || "—",
+          incident.reported_by || "—",
+          incident.assigned_to || "—",
+          (new Date(incident.creation_date)).toLocaleDateString("en-GB"),
+        ];
 
-        // Status
-        const statusCell = document.createElement("td");
-        statusCell.textContent = incident.status;
-        row.appendChild(statusCell);
+        // New comment: Append each field as a table cell
+        fields.forEach(text => {
+          const cell = document.createElement("td");
+          cell.textContent = text;
+          row.appendChild(cell);
+        });
 
-        // Description
-        const descriptionCell = document.createElement("td");
-        descriptionCell.textContent = incident.description || "—"; // Displaying the description, defaulting to "—" if not available
-        row.appendChild(descriptionCell);
-
-        // Category
-        const categoryCell = document.createElement("td");
-        categoryCell.textContent = incident.category || "—";
-        row.appendChild(categoryCell);
-
-        // Department
-        const departmentCell = document.createElement("td");
-        departmentCell.textContent = incident.department || "—";
-        row.appendChild(departmentCell);
-
-        // Reported By – New column
-        const reportedByCell = document.createElement("td");
-        reportedByCell.textContent = incident.reported_by || "—";
-        row.appendChild(reportedByCell);
-
-        // Assigned To – New column
-        const assignedToCell = document.createElement("td");
-        assignedToCell.textContent = incident.assigned_to || "—";
-        row.appendChild(assignedToCell);
-
-        // Date
-        const dateCell = document.createElement("td");
-        const rawDate = new Date(incident.creation_date);
-        dateCell.textContent = rawDate.toLocaleDateString("en-GB"); // Format: DD/MM/YYYY
-        row.appendChild(dateCell);
-
-        // Actions
+        // Actions column: Edit and Delete buttons
         const actionsCell = document.createElement("td");
 
-        // Edit Button
         const editBtn = document.createElement("button");
         editBtn.textContent = "Edit";
         editBtn.className = "edit-btn";
         editBtn.onclick = () => {
+          // New comment: Redirect to edit incident page with incident id as parameter
           window.location.href = `Edit_Incident.html?id=${incident.id}`;
         };
         actionsCell.appendChild(editBtn);
 
-        // Delete Button
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Delete";
         deleteBtn.className = "delete-btn";
@@ -161,17 +134,17 @@ function confirmDelete(id) {
     fetch("../../SERVER/API/Incidents/Delete_Incident.php", {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json", // Establece el tipo de contenido como JSON
+        "Content-Type": "application/json", // Set content-type header
       },
-      body: JSON.stringify({ id: id }) // Envía el ID en el cuerpo de la solicitud
+      body: JSON.stringify({ id: id }) // Send id in request body
     })
       .then(response => response.json())
       .then(data => {
         if (data.success) {
           alert("Incident deleted successfully.");
-          loadRecentIncidents();  // Vuelve a cargar las incidencias después de la eliminación
+          loadRecentIncidents();  // Reload incidents after deletion
         } else {
-          alert("Error deleting incident: " + data.message); // Muestra el mensaje de error
+          alert("Error deleting incident: " + data.message);
         }
       })
       .catch(error => {
@@ -182,6 +155,10 @@ function confirmDelete(id) {
 
 // Logout function: clears session and redirects to Login
 function logout() {
-  localStorage.clear();
-  window.location.href = "../HTML/Login.html";
+  // Clear local session data
+  localStorage.removeItem('user');
+  localStorage.removeItem('isLoggedIn');
+
+  // Redirect directly to login.html without calling Keycloak logout
+  window.location.href = 'Login.html';
 }

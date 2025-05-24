@@ -1,69 +1,53 @@
 /* 
-  CSS FOR LOGIN FORM
-  This stylesheet defines the layout and appearance of the login form,
-  including the container, inputs, buttons, and error messages.
+  CSS FOR LOGIN PAGE
+  This stylesheet defines the layout and appearance of the login page.
 */
 
+/* Reset margins and paddings, set full viewport height,
+   and center content both vertically and horizontally */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f3f4f6;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
 }
 
+/* Main container that holds the login form content */
 .login-container {
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-form {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 40px 60px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-label {
-  margin-bottom: 5px;
-  font-weight: bold;
+/* Title style */
+.login-title {
+  margin-bottom: 30px;
+  font-size: 24px;
+  color: #333;
 }
 
-input[type="text"],
-input[type="password"] {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-button {
-  padding: 10px;
-  background-color: #2563eb;
-  color: white;
+/* Keycloak login button styling */
+#btnLoginKeycloak {
+  background-color: #4a90e2;
+  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;            
   cursor: pointer;
-  font-size: 15px;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #1e40af;
-}
-
-#error-message {
-  margin-top: 10px;
-  color: red;
+  transition: background 0.3s ease;
   text-align: center;
-  font-size: 14px;
+}
+
+/* Button hover effect: darker blue */
+#btnLoginKeycloak:hover {
+  background-color: #357ab8;
 }

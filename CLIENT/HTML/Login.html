@@ -1,31 +1,37 @@
-<!-- 
-  LOGIN FORM PAGE
-  This page provides a login form that collects the username and password,
-  and calls a JavaScript function to authenticate the user via the login API.
+<!--
+  login.html- This page provides a simple login interface for the Incident Management system.
+  It displays a single button that initiates authentication via Keycloak when clicked.
+  After clicking, the user is redirected to the PHP backend handler (keycloak_login.php),
+  which initiates the OpenID Connect login flow.
 -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es"> <!-- Set language to Spanish -->
 <head>
-  <meta charset="UTF-8">
-  <title>Login - Incident Management</title>
-  <link rel="stylesheet" href="../Assets/Login.css">
+  <meta charset="UTF-8" /> <!-- Define character encoding -->
+  <title>Login - Incident Management</title> <!-- Page title shown in browser tab -->
+
+  <!-- Link to external CSS file for styling the login page -->
+  <link rel="stylesheet" href="../Assets/Login.css" />
 </head>
 <body>
+  <!-- Main container for the login interface -->
   <div class="login-container">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <label for="user">Username:</label>
-      <input type="text" id="user" name="user" required>
+    <h2 class="login-title">Login</h2> <!-- Title displayed above the login button -->
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
-
-      <button type="submit">Login</button>
-    </form>
-    <p id="error-message" style="color: red;"></p>
+    <center>
+      <!-- Button that triggers login with Keycloak -->
+      <button id="btnLoginKeycloak">Login with Keycloak</button>
+    </center>
   </div>
 
-  <script src="../JS/Login.js"></script>
+  <!-- JavaScript to handle login button behavior -->
+  <script>
+    // Add click event listener to the login button
+    document.getElementById('btnLoginKeycloak').addEventListener('click', function() {
+      // Redirect to the PHP script that starts the Keycloak login process
+      window.location.href = 'http://localhost/PROYECT/SERVER/API/Login/keycloak_login.php';
+    });
+  </script>
 </body>
 </html>
