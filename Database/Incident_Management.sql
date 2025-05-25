@@ -96,7 +96,7 @@ INSERT INTO roles (name) VALUES
 -- This data will be used for testing and demonstration purposes
 INSERT INTO users (name, email, password, role_id) VALUES 
   ('Sergio', 'sergio.de-miguel-g@yorksj.ac.uk', '1234', 1),
-  ('Sam', 's.memon@yorksj.ac.uk', '1234', 2);
+  ('Useradmin', 'useradmin@gmail.com', '1234', 2);
 
 -- Insert data into the categories table
 -- This data will be used to categorize incidents
