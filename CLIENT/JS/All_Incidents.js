@@ -8,13 +8,15 @@ if (localStorage.getItem("isLoggedIn") !== "true") {
 
   // Retrieve user info from localStorage
   const currentUser = JSON.parse(localStorage.getItem("user"));
+  console.log("User role:", currentUser.role);
+
   
-  // Map role_id to a readable role name
-  // This allows later checks like: if (currentUser.role === "admin")
-  if (currentUser.role_id === 1) {
-    currentUser.role = "admin";
-  } else {
-    currentUser.role = "user"; // or another role name if needed
+// Map role_id to a readable role name
+// This allows later checks like: if (currentUser.role === "admin")
+  if (!currentUser || !currentUser.role) {
+    // For security reasons, clean and redirect to login.
+    localStorage.clear();
+    window.location.href = "Login.html";
   }
 
 // Waits until the DOM content is fully loaded
@@ -36,20 +38,21 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "Login.html";
   }
   
-  // Show admin-only columns if user is admin
-  if (currentUser.role === "admin") {
-    document.querySelectorAll(".admin-only").forEach(el => {
-      el.classList.add("admin-visible"); // Muestra columnas admin
-    });
-  } else {
-    document.querySelectorAll(".admin-only").forEach(el => {
-      el.classList.remove("admin-visible"); // Oculta columnas admin
-    });
-  }
-
-
   // Load all incidents
   loadAllIncidents();
+
+  // Show admin-only columns if user is admin
+  console.log("Current user:", currentUser);
+  if (currentUser.role === "admin") {
+    document.querySelectorAll(".admin-only").forEach(el => {
+      el.classList.add("admin-visible");
+    });
+  } else {
+    // Ensure admin-only elements remain hidden if not admin
+    document.querySelectorAll(".admin-only").forEach(el => {
+      el.classList.remove("admin-visible");
+    });
+  }
 });
 
 // Function to load and display all incidents in the table
@@ -82,14 +85,17 @@ function loadAllIncidents() {
         return;
       }
 
+console.log("Incidents loaded:", incidents);
       // Loop through incidents and create rows in the table
       incidents.forEach(incident => {
         const row = document.createElement("tr");
+        console.log("Incident ID:", incident.id);
 
         // Admin-only column: Display ID
         if (currentUser.role.toLowerCase() === "admin") {
           const idCell = document.createElement("td");
           idCell.textContent = incident.id;
+          idCell.classList.add("admin-only", "admin-visible");
           row.appendChild(idCell);
         }
 

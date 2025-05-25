@@ -9,7 +9,7 @@ const currentUser = JSON.parse(localStorage.getItem("user"));
 // Map role_id to a readable role name
 // This allows later checks like: if (currentUser.role === "admin")
   if (!currentUser || !currentUser.role) {
-    // Por seguridad, limpia y redirige al login
+    // For security reasons, clean and redirect to login.
     localStorage.clear();
     window.location.href = "Login.html";
   }
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadRecentIncidents();
 
   // Show admin-only columns if user is admin
-  console.log("Usuario actual:", currentUser);
+  console.log("Current user:", currentUser);
   if (currentUser.role === "admin") {
     document.querySelectorAll(".admin-only").forEach(el => {
       el.classList.add("admin-visible");
