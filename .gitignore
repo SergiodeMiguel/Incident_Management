@@ -1,6 +1,7 @@
-PRUEBAS
+Ignore/
 mejoras.txt
 Git&Jenkins.txt
 CLIENT-MANUAL.docx
 SERVER-MANUAL.docx
 Docker.txt
+.gitignore
