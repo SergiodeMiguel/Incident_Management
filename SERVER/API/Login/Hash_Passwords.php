@@ -10,6 +10,8 @@
   - Hashes the plain password securely
   - Updates the user record with the hashed password
   - Outputs status messages for each user processed
+
+  This file is not used anymore after the implementation of keycloak for login
 */
 
 // Include the database connection file to use $conn

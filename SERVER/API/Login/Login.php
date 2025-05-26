@@ -6,8 +6,10 @@
   uses password hashing for security,
   manages session creation upon successful login,
   and returns JSON responses indicating success or failure.
+
+  This file is not used anymore after the implementation of keycloak for login
 */
-/* 
+
 // Set response header to JSON as this API returns JSON responses
 header('Content-Type: application/json');
 
@@ -85,4 +87,3 @@ if ($userData = $result->fetch_assoc()) {
 // Close statement and connection to free resources
 $stmt->close();
 $conn->close();
- */
