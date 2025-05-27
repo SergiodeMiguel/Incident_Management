@@ -22,36 +22,27 @@ A web-based incident management system that allows users to create, edit, assign
 
 ### Installation Steps
 
-1. Clone the repository:
-   ```bash
+Clone the repository:
    git clone https://github.com/tuusuario/incident-management-system.git
+
+Change the name of the folder that contains everything to PROYECT instead of Incident_Management, once you once you decompress it to avoid problems with code paths.
+
 Import the database:
-
 Open phpMyAdmin or another MySQL client.
-
 Import the file Incident_Management.sql.
 
 Set up Keycloak:
-
-Create a realm (e.g., Incident-System) and a client (php-app).
-
-Enable OpenID Connect (public client, standard flow).
-
-Add test users and assign them roles: admin, user.
+- Create a realm (e.g., Incident-System) and a client (php-app).
+- Enable OpenID Connect (public client, standard flow).
+- Add test users and assign them roles: admin, user.
 
 Install PHP dependencies with Composer:
-
-bash
-Copiar
-Editar
 composer install
+
 Start Apache and MySQL via XAMPP or your preferred stack.
 
 Open the application:
 
-arduino
-Copiar
-Editar
 http://localhost/PROYECT/CLIENT/HTML/Login.html
 🔒 Login & Roles
 Authentication is managed via Keycloak. After logging in, user info and role are saved in localStorage.
